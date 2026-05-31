@@ -1,0 +1,59 @@
+{
+  "headers": {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+    "Accept-Language": "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Referer": "https://www.avito.ru/",
+    "Origin": "https://www.avito.ru",
+    "Connection": "keep-alive",
+    "Cache-Control": "max-age=0",
+    "Upgrade-Insecure-Requests": "1",
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "same-origin",
+    "Sec-Fetch-User": "?1",
+    "Sec-Ch-Ua": "\"Google Chrome\";v=\"131\", \"Chromium\";v=\"131\", \"Not_A Brand\";v=\"24\"",
+    "Sec-Ch-Ua-Mobile": "?0",
+    "Sec-Ch-Ua-Platform": "\"Windows\"",
+    "DNT": "1",
+    "Priority": "u=0, i",
+    "TE": "Trailers"
+  },
+  "cookies": {
+    "avito_visited_pages": "5",
+    "avito_region": "650000",
+    "avito_suggest_viewed": "true",
+    "mrbar": "hide",
+    "avito_delivery_seen": "1",
+    "avito_promo_seen": "1",
+    "avito_ftr_seen": "1"
+  },
+  "settings": {
+    "delay_between_requests": 3,
+    "max_retries": 3,
+    "timeout": 30,
+    "max_pages": 10,
+    "save_to_file": true,
+    "output_format": "json",
+    "output_path": "/home/murat/avito-monitor/results"
+  },
+  "proxy": {
+    "enabled": false,
+    "type": "http",
+    "host": "",
+    "port": "",
+    "username": "",
+    "password": ""
+  },
+  "parsing": {
+    "categories": {
+      "telefony": "телефоны",
+      "avtomobili": "автомобили",
+      "kvartiry": "квартиры",
+      "odezhda": "одежда"
+    },
+    "default_city": "moskva",
+    "items_per_page": 50
+  }
+}
