@@ -116,17 +116,17 @@ def random_scroll(page):
         page.evaluate(f'window.scrollBy(0, {random.randint(300, 800)})'); time.sleep(random.uniform(0.5, 1.2))
 
 def wait_for_page_load(page, timeout=30):
-    try: page.wait_for_load_state('networkidle', timeout=timeout*1000); print("  📡 Сеть стабилизировалась")
-    except: print("  ⚠️ Таймаут ожидания сети, продолжаем...")
-    try: page.wait_for_load_state('domcontentloaded', timeout=timeout*1000); print("  📄 DOM загружен")
-    except: print("  ⚠️ Таймаут ожидания DOM")
-    additional_delay = random.uniform(3, 6); print(f"  ⏳ Ожидание полной отрисовки страницы ({additional_delay:.1f} сек)..."); time.sleep(additional_delay)
+    try: page.wait_for_load_state('networkidle', timeout=timeout*1000); print("   Сеть стабилизировалась")
+    except: print("  Предупреждение: Таймаут ожидания сети, продолжаем...")
+    try: page.wait_for_load_state('domcontentloaded', timeout=timeout*1000); print("   DOM загружен")
+    except: print("  Предупреждение: Таймаут ожидания DOM")
+    additional_delay = random.uniform(3, 6); print(f"   Ожидание полной отрисовки страницы ({additional_delay:.1f} сек)..."); time.sleep(additional_delay)
 
 def extract_items_from_page(page):
     items = []; time.sleep(random.uniform(1, 2))
-    try: page.wait_for_selector('div[data-marker="item"]', timeout=15000); print("  🎯 Селектор объявлений найден")
-    except: print("  ⚠️ Селектор объявлений не найден, пробуем другие методы")
-    human_delay(); random_scroll(page); time.sleep(random.uniform(1.5, 3)); print("  🔄 Ждем подгрузки динамического контента...")
+    try: page.wait_for_selector('div[data-marker="item"]', timeout=15000); print("   Селектор объявлений найден")
+    except: print("  Предупреждение: Селектор объявлений не найден, пробуем другие методы")
+    human_delay(); random_scroll(page); time.sleep(random.uniform(1.5, 3)); print("   Ждем подгрузки динамического контента...")
     item_elements = page.query_selector_all('div[data-marker="item"]')
     if not item_elements: item_elements = page.query_selector_all('[class*="item"]')
     print(f"  Найдено элементов: {len(item_elements)}")
@@ -179,37 +179,37 @@ def save_results_to_files(results, city, query, pages=1, category=None):
     return simple_output_file, full_output_file
 
 def print_pretty_results(results, city, query, category=None):
-    print("\n" + "=" * 80); print(f"📊 РЕЗУЛЬТАТЫ ПАРСИНГА"); print("=" * 80)
-    if city: print(f"🏙️  Город: {city}")
-    else: print(f"🇷🇺  Регион: ВСЯ РОССИЯ")
-    print(f"🔍 Поисковый запрос: {query}")
-    if category: print(f"📂 Категория: {category}")
-    print(f"📊 Всего найдено: {len(results)} объявлений")
-    print(f"🕐 Время парсинга: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"); print("=" * 80)
+    print("\n" + "=" * 80); print("РЕЗУЛЬТАТЫ ПАРСИНГА"); print("=" * 80)
+    if city: print(f"  Город: {city}")
+    else: print(f"  Регион: ВСЯ РОССИЯ")
+    print(f"  Поисковый запрос: {query}")
+    if category: print(f"  Категория: {category}")
+    print(f"  Всего найдено: {len(results)} объявлений")
+    print(f"  Время парсинга: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"); print("=" * 80)
     if results:
-        print(f"\n📋 Детальный список объявлений:"); print("-" * 80)
+        print(f"\n  Детальный список объявлений:"); print("-" * 80)
         for i, item in enumerate(results, 1):
-            print(f"\n{i}. 📱 {item['title']}"); print(f"   💰 Цена: {item['price']} ₽")
-            short_link = item['link'][:80] + "..." if len(item['link']) > 80 else item['link']; print(f"   🔗 Ссылка: {short_link}"); print("-" * 80)
+            print(f"\n{i}.  {item['title']}"); print(f"   Цена: {item['price']} руб.")
+            short_link = item['link'][:80] + "..." if len(item['link']) > 80 else item['link']; print(f"    Ссылка: {short_link}"); print("-" * 80)
         prices = []
         for item in results:
-            price_str = item['price'].replace(' ', '').replace('₽', '').strip()
+            price_str = item['price'].replace(' ', '').replace('руб', '').replace('₽', '').strip()
             if price_str and price_str != 'Цена не указана':
                 try:
                     price_num = re.search(r'(\d+)', price_str)
                     if price_num: prices.append(int(price_num.group(1)))
                 except: pass
         if prices:
-            print(f"\n📊 Статистика по ценам:")
-            print(f"   • Минимальная цена: {min(prices):,} ₽".replace(',', ' '))
-            print(f"   • Средняя цена: {sum(prices) // len(prices):,} ₽".replace(',', ' '))
-            print(f"   • Максимальная цена: {max(prices):,} ₽".replace(',', ' '))
-    else: print("\n❌ Объявления не найдены.\nВозможные причины:\n  • Нет объявлений по вашему запросу\n  • Проблемы с загрузкой страницы\n  • Блокировка со стороны Avito")
+            print(f"\n  Статистика по ценам:")
+            print(f"   • Минимальная цена: {min(prices):,} руб.".replace(',', ' '))
+            print(f"   • Средняя цена: {sum(prices) // len(prices):,} руб.".replace(',', ' '))
+            print(f"   • Максимальная цена: {max(prices):,} руб.".replace(',', ' '))
+    else: print("\n  Объявления не найдены.\nВозможные причины:\n  • Нет объявлений по вашему запросу\n  • Проблемы с загрузкой страницы\n  • Блокировка со стороны Avito")
 
 def parse_avito_playwright(city, query, category=None, pages=1):
     all_items = []; city_slug = normalize_city(city)
-    if city_slug is None: print("🌍 Поиск по ВСЕЙ РОССИИ (без ограничения по городу)"); base_url_template = "https://www.avito.ru"
-    else: print(f"🏙️ Город в URL: {city_slug}"); base_url_template = f"https://www.avito.ru/{city_slug}"
+    if city_slug is None: print("  Поиск по ВСЕЙ РОССИИ (без ограничения по городу)"); base_url_template = "https://www.avito.ru"
+    else: print(f"  Город в URL: {city_slug}"); base_url_template = f"https://www.avito.ru/{city_slug}"
     with sync_playwright() as p:
         user_agent = config['headers']['User-Agent']
         if settings.get('use_random_user_agent', False) and 'user_agents' in config: user_agent = random.choice(config['user_agents'])
@@ -220,66 +220,66 @@ def parse_avito_playwright(city, query, category=None, pages=1):
         context.add_init_script("""Object.defineProperty(navigator, 'webdriver', {get: () => undefined});
             Object.defineProperty(navigator, 'plugins', {get: () => [1,2,3,4,5]}); window.chrome = {runtime: {}};
             Object.defineProperty(navigator, 'languages', {get: () => ['ru-RU', 'ru']});""")
-        page = context.new_page(); print("🌐 Устанавливаю сессию..."); page.goto('https://www.avito.ru/', timeout=60000)
+        page = context.new_page(); print("  Устанавливаю сессию..."); page.goto('https://www.avito.ru/', timeout=60000)
         wait_for_page_load(page, timeout=20); human_delay()
         for page_num in range(1, pages + 1):
             category_slug = normalize_category(category) if category else None
             if category_slug:
                 url = f"{base_url_template}/{category_slug}?q={query}&p={page_num}" if category_slug else f"{base_url_template}?q={query}&p={page_num}"
             else: url = f"{base_url_template}?q={query}&p={page_num}"
-            print(f"\n📄 Страница {page_num}: {url}")
+            print(f"\n  Страница {page_num}: {url}")
             retry_count, max_retries = 0, 3
             while retry_count < max_retries:
                 try:
                     cached_html = load_cached_page(url)
                     if cached_html:
-                        print("  📦 Загружено из кэша"); page.set_content(cached_html); wait_for_page_load(page, timeout=15)
+                        print("  Загружено из кэша"); page.set_content(cached_html); wait_for_page_load(page, timeout=15)
                     else:
-                        print("  🌐 Загружаем страницу..."); page.goto(url, timeout=60000, wait_until='domcontentloaded')
+                        print("  Загружаем страницу..."); page.goto(url, timeout=60000, wait_until='domcontentloaded')
                         wait_for_page_load(page, timeout=25); dynamic_delay = random.uniform(2, 4)
-                        print(f"  🔄 Дополнительная задержка для динамики ({dynamic_delay:.1f} сек)..."); time.sleep(dynamic_delay); save_to_cache(url, page.content())
+                        print(f"  Дополнительная задержка для динамики ({dynamic_delay:.1f} сек)..."); time.sleep(dynamic_delay); save_to_cache(url, page.content())
                     if page.query_selector('text=/Доступ ограничен|проблема с IP|капча|captcha/i'):
-                        print(f"  ⚠️ Страница {page_num} заблокирована, попытка {retry_count + 1}/{max_retries}")
+                        print(f"  Предупреждение: Страница {page_num} заблокирована, попытка {retry_count + 1}/{max_retries}")
                         retry_count += 1; time.sleep(30 * retry_count); continue
                     time.sleep(random.uniform(1, 2)); items = extract_items_from_page(page)
                     if items:
-                        print(f"  ✅ Найдено объявлений: {len(items)}"); all_items.extend(items); break
+                        print(f"  Найдено объявлений: {len(items)}"); all_items.extend(items); break
                     else:
-                        print(f"  ⚠️ Не найдено объявлений"); html = page.content()
+                        print(f"  Предупреждение: Не найдено объявлений"); html = page.content()
                         with open(f'debug_page_{page_num}_{int(time.time())}.html', 'w', encoding='utf-8') as f: f.write(html)
-                        print(f"  📁 HTML сохранен для отладки"); break
+                        print(f"  HTML сохранен для отладки"); break
                 except Exception as e:
-                    print(f"  ❌ Ошибка: {e}, попытка {retry_count + 1}/{max_retries}"); retry_count += 1
+                    print(f"  Ошибка: {e}, попытка {retry_count + 1}/{max_retries}"); retry_count += 1
                     if retry_count < max_retries: time.sleep(15 * retry_count)
                     else: break
-            if page_num < pages: delay = settings['delay_between_requests'] + random.uniform(8, 15); print(f"  ⏱️ Пауза между страницами {delay:.1f} сек..."); time.sleep(delay)
+            if page_num < pages: delay = settings['delay_between_requests'] + random.uniform(8, 15); print(f"  Пауза между страницами {delay:.1f} сек..."); time.sleep(delay)
         browser.close()
     return all_items
 
 def show_categories():
     if 'parsing' in config and 'categories' in config['parsing']:
-        print("\n📂 Доступные категории:"); print("-" * 40)
+        print("\nДоступные категории:"); print("-" * 40)
         for eng, rus in config['parsing']['categories'].items(): print(f"  • {rus} ({eng})")
         print()
 
 def show_city_help():
-    print("\n🏙️  Введите город (на русском):"); print("   • Москва, Санкт-Петербург, Казань, Екатеринбург")
+    print("\nВведите город (на русском):"); print("   • Москва, Санкт-Петербург, Казань, Екатеринбург")
     print("   • Владивосток, Сочи, Краснодар, Нижний Новгород"); print("   • И более 500 других городов РФ")
-    print("\n💡 Для поиска по ВСЕЙ РОССИИ просто нажмите Enter")
+    print("\nДля поиска по ВСЕЙ РОССИИ просто нажмите Enter")
 
 if __name__ == "__main__":
-    print("=" * 50); print("🚀 Avito Parser (Расширенная версия)"); print("=" * 50); show_city_help()
+    print("=" * 50); print("Avito Parser (Расширенная версия)"); print("=" * 50); show_city_help()
     city = input("\nГород (Enter для поиска по всей России): ").strip()
-    if not city: city = None; print("  🌍 Выполняется поиск по ВСЕЙ РОССИИ")
-    else: print(f"  🏙️ Выбран город: {city}")
-    show_categories(); print("💡 Для поиска по всем категориям просто нажмите Enter")
+    if not city: city = None; print("  Поиск по ВСЕЙ РОССИИ")
+    else: print(f"  Выбран город: {city}")
+    show_categories(); print("Для поиска по всем категориям просто нажмите Enter")
     category = input("Категория (необязательно): ").strip()
     if not category: category = None; print("  Поиск по всем категориям")
-    query = input("\n🔍 Введите товар: ").strip()
-    if not query: query = input("❌ Товар не указан. Введите товар: ").strip()
-    pages_input = input("📑 Сколько страниц (по умолчанию 1): ").strip()
+    query = input("\nВведите товар: ").strip()
+    if not query: query = input("Товар не указан. Введите товар: ").strip()
+    pages_input = input("Сколько страниц (по умолчанию 1): ").strip()
     pages = int(pages_input) if pages_input.isdigit() else 1
-    print(f"\n🚀 Начинаю парсинг:")
+    print(f"\nНачинаю парсинг:")
     if city: print(f"   Город: {city}")
     else: print(f"   Регион: ВСЯ РОССИЯ")
     print(f"   Категория: {category if category else 'Все категории'}"); print(f"   Товар: {query}"); print(f"   Страниц: {pages}"); print("=" * 50)
@@ -287,8 +287,8 @@ if __name__ == "__main__":
     print_pretty_results(results, city, query, category)
     if results:
         simple_file, full_file = save_results_to_files(results, city, query, pages, category)
-        print(f"\n💾 Результаты сохранены:"); print(f"   • Только объявления: {simple_file}"); print(f"   • С метаданными: {full_file}")
+        print(f"\nРезультаты сохранены:"); print(f"   • Только объявления: {simple_file}"); print(f"   • С метаданными: {full_file}")
         default_file = f'results_{query.replace(" ", "_")}.json'
         with open(default_file, 'w', encoding='utf-8') as f: json.dump(results, f, ensure_ascii=False, indent=2)
         print(f"   • Стандартный файл: {default_file}")
-    else: print("\n❌ Объявления не найдены. Результаты не сохранены.")
+    else: print("\nОбъявления не найдены. Результаты не сохранены.")
